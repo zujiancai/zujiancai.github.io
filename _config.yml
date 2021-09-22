@@ -1,11 +1,11 @@
 # Setup
-title: Not Pure Poole
-description: A simple, beautiful, and powerful Jekyll theme for blogs
-url: https://vszhub.github.io
-avatar: /avatar.jpeg
-paginate: 5
+title: Da Rou Ni
+description: "My record keeping for technology, life, and much more."
+url: https://zujiancai.github.io
+avatar: /assets/img/avatar.jpg
+paginate: 8
 permalink: pretty
-cover_image: /bg.jpeg
+cover_image: /assets/img/bg-star-night.jpg
 
 # Gems
 plugins:
@@ -33,12 +33,11 @@ twitter:
   card: summary
 logo: logo.png
 social:
-  name: Songzi Vong
+  name: Zujian Cai
   links:
-    - https://twitter.com/vszhub
-    - https://github.com/vszhub
+    - https://github.com/zujiancai
 google_site_verification: xxxxx
-lang: en
+lang: zh
 
 sass:
   sass_dir: _sass
@@ -54,6 +53,6 @@ sass:
 
 # Specify the author for blog posts
 author:
-  name: Songzi Vong
-  url: https://github.com/vszhub/
-  email: vszhub@gmail.com
+  name: Zujian Cai
+  url: https://github.com/zujiancai
+  email: zujiancai@yahoo.com
