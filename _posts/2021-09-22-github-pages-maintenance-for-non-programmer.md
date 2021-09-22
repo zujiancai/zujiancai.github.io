@@ -81,7 +81,18 @@ Git还有很多功能，如果感兴趣，可以看看[官方文档](https://git
 
 GitHub Pages使用[Jekyll](https://jekyllrb.com/) 来生成静态网页。当然，你不须要完全理解Jekyll。以内容更新为目的，你只须知道在哪里找到相应的页面和图片，以及了解页面内容的基本格式就可以了。
 
+```
+---
+layout: post
+title: "Sed pulvinar volutpat justo id tempus"
+date: 2021-06-01 17:21:00 -0700
+background: '/img/posts/bathroom_02.jpg'
+---
 
+Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis orci placerat, molestie velit sed, lacinia nisi. Curabitur viverra id felis non cursus. Phasellus et sodales ligula. Sed imperdiet sed dui vitae aliquet. Quisque sed luctus dolor, sed congue ex. In iaculis turpis magna, non mattis nisi pellentesque id. Nam in metus nec dolor dapibus imperdiet et ut nunc.
+
+<img src="{% link img/posts/bathroom_03.jpg %}" alt="bath tub 1" width="600"/>
+```
 
 # 实践出真知
 
