@@ -80,7 +80,7 @@ Git还有很多功能，如果感兴趣，可以看看[官方文档](https://git
 # GitHub Pages的结构与内容
 
 GitHub Pages使用[Jekyll](https://jekyllrb.com/)来生成静态网页。当然，你不须要完全理解Jekyll；只做简单的内容更新，只须知道在哪里找到页面和图片，以及了解页面的基本格式。
-一般的页面在根目录下，后缀是.html或者.md。比如，./about.md对应的是http://<YOUR_WEBSITE>/about.html。至于博客文章的页面，则存放在_posts目录下，文件名的格式是YEAR-MONTH-DAY-title.md，比如，2021-09-22-how-to-earn-your-first-million.md。而图片可以存放在任何目录下，一般习惯放在img目录下。在页面中引用图片时，须要提供正确的文件路径。
+一般的页面在根目录下，后缀是`.html`或者`.md`。比如，`./about.md`对应的是`http://<YOUR_WEBSITE>/about.html`。至于博客文章的页面，则存放在`_posts`目录下，文件名的格式是`YEAR-MONTH-DAY-title.md`，比如，`2021-09-22-how-to-earn-your-first-million.md`。而图片可以存放在任何目录下，一般习惯放在img目录下。在页面中引用图片时，须要提供正确的文件路径。
 
 页面内容支持HTML和Markdown格式，但文件开头还会有font matter的数据信息，这部分是以yaml格式存在的。先来看一个例子：
 
