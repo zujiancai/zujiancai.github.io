@@ -85,6 +85,11 @@ GitHub Pages使用[Jekyll](https://jekyllrb.com/) 来生成静态网页。当然
 
 页面内容支持HTML和Markdown格式，但文件开头还会有font matter的数据信息，这部分是以yaml格式存在的。先来看一个例子：
 
+开头在两个`---`之间的部分就是font matter，除了`layout`外（这是页面使用的模板），其他像`title`、`date`和`background`都可以按需要改动。`background`的图片需要添加到相应的目录下，例子里的是`/img/posts/`。
+
+接下来就是文章内容，Markdown提供了很多文本格式支持，你可以参考[Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)。例子中的文本没有使用任何格式，所以就是基本的段落文字。
+例子中的配图，使用了HTML。Markdown也有图片支持，但不好调整图片的尺寸。像这里的HTML图片属性`width=600`，把大图片的宽度缩小为600像素（高度按比例缩小）。另外，图片路径，须要引用在`{% link %}`里，以便编译时能生成正确的地址。从[这个文档](https://www.w3schools.com/html/html_images.asp)可以了解更多关于HTML的图片格式。
+
 # 实践出真知
 
 到这里你可以动手尝试了，不要害怕改坏了，Git的后悔药并不昂贵，而且遇到问题还有系统管理员作为你的后盾。Go and good luck!
