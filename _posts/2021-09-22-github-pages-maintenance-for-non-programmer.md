@@ -3,7 +3,7 @@ layout: post
 title: "GitHub Pages内容维护（非程序员）"
 date: 2021-09-22 09:00 -0700
 last_modified_at: 2021-09-22 11:45 -0700
-tags: [Technology]
+tags: [Technology], [Chinese]
 ---
 
 本文假设你已经有一个搭建好的GitHub Pages repository，有系统管理员帮你处理技术细节，你只需要做一些简单的内容维护：增、删、改文章内容，更新背景图片等。
@@ -81,27 +81,7 @@ Git还有很多功能，如果感兴趣，可以看看[官方文档](https://git
 
 GitHub Pages使用[Jekyll](https://jekyllrb.com/) 来生成静态网页。当然，你不须要完全理解Jekyll。以内容更新为目的，你只须知道在哪里找到相应的页面和图片，以及了解页面内容的基本格式就可以了。
 
-一般的页面在根目录下，后缀是`.html`或者`.md`。比如，`./about.md`对应的是`http://<YOUR_WEBSITE>/about.html`。至于博客文章的页面，则存放在`_posts`目录下，文件名的格式是`YEAR-MONTH-DAY-title.md`，比如，`2021-09-22-how-to-earn-your-first-million.md`。而图片可以存放在任何目录下，一般习惯放在img目录下。在页面中引用图片时，须要提供正确的文件路径。
 
-页面内容支持HTML和Markdown格式，但文件开头还会有font matter的数据信息，这部分是以yaml格式存在的。先来看一个例子：
-
-```
----
-layout: post
-title: "Sed pulvinar volutpat justo id tempus"
-date: 2021-06-01 17:21:00 -0700
-background: '/img/posts/bathroom_02.jpg'
----
-
-Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis orci placerat, molestie velit sed, lacinia nisi. Curabitur viverra id felis non cursus. Phasellus et sodales ligula. Sed imperdiet sed dui vitae aliquet. Quisque sed luctus dolor, sed congue ex. In iaculis turpis magna, non mattis nisi pellentesque id. Nam in metus nec dolor dapibus imperdiet et ut nunc.
-
-<img src="{% link img/posts/bathroom_03.jpg %}" alt="bath tub 1" width="600"/>
-```
-
-开头在两个`---`之间的部分就是font matter，除了`layout`外（这是页面使用的模板），其他像`title`、`date`和`background`都可以按需要改动。`background`的图片需要添加到相应的目录下，例子里的是`/img/posts/`。
-
-接下来就是文章内容，Markdown提供了很多文本格式支持，你可以参考[Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)。例子中的文本没有使用任何格式，所以就是基本的段落文字。
-例子中的配图，使用了HTML。Markdown也有图片支持，但不好调整图片的尺寸。像这里的HTML图片属性`width=600`，把大图片的宽度缩小为600像素（高度按比例缩小）。另外，图片路径，须要引用在`{% link %}`里，以便编译时能生成正确的地址。从[这个文档](https://www.w3schools.com/html/html_images.asp)可以了解更多关于HTML的图片格式。
 
 # 实践出真知
 
