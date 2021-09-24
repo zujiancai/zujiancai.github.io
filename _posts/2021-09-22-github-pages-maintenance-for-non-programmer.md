@@ -6,7 +6,7 @@ last_modified_at: 2021-09-24 11:45 -0700
 tags: [technology, chinese]
 ---
 
-> :information_source: 本文假设你已经有一个搭建好的GitHub Pages repository，有系统管理员帮你处理技术细节，你只需要做一些简单的内容维护：增、删、改文章内容，更新背景图片等。
+> :bulb:本文假设你已经有一个搭建好的GitHub Pages repository，有系统管理员帮你处理技术细节，你只需要做一些简单的内容维护：增、删、改文章内容，更新背景图片等。
 
 # 创建GitHub用户号与授权
 
@@ -119,8 +119,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis orci placerat
 接下来就是文章内容，Markdown提供了很多文本格式支持，你可以参考[GitHub的相关文档](https://guides.github.com/features/mastering-markdown/)。例子中的文本没有使用任何格式，所以就是基本的段落文字。
 但例子中的配图，则直接使用了[HTML img标签](https://www.w3schools.com/html/html_images.asp)。Markdown格式的图片不便于调整图片尺寸，而HTML可以通过图片属性`width=600`，把大图片的宽度缩小为600像素（高度按比例缩小）。另外，图片路径，须要引用在`{% raw %}{% link %}{% endraw %}`里，以便编译时能生成正确的地址。
 
-> :warning: 关于Markdown，GitHub Pages支持两种处理器： [Kramdown](https://kramdown.gettalong.org/)和[GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/)，他们只有细微的差别。详情请看[这里](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/setting-a-markdown-processor-for-your-github-pages-site-using-jekyll)。
+> :warning:关于Markdown，GitHub Pages支持两种处理器： [Kramdown](https://kramdown.gettalong.org/)和[GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/)，他们只有细微的差别。详情请看[这里](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/setting-a-markdown-processor-for-your-github-pages-site-using-jekyll)。
 
 # 实践出真知
 
-到这里你可以动手尝试了，不要害怕改坏了，Git的后悔药并不昂贵，而且遇到问题还有系统管理员作为你的后盾。Go and good luck! :smiley:
+到这里你可以动手尝试了，不要害怕改坏了，Git的后悔药并不昂贵，而且遇到问题还有系统管理员作为你的后盾。Go and good luck!:smiley:
