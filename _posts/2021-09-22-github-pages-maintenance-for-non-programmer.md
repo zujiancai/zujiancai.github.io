@@ -10,7 +10,7 @@ tags: [technology, chinese]
 
 # 创建GitHub用户号与授权
 
-如果你还没有GitHub用户号，可以到[这里](https://github.com/)申请，按网页提示操作就可以了，这里不再赘述。然后，把你的用户号给系统管理员，作必要的授权。
+如果你还没有一个GitHub用户号，可以到[这里](https://github.com/)申请，按网页提示操作就可以了，这里不再赘述。然后，把你的用户名（不需要密码哦！）提供给系统管理员，作必要的授权。
 
 # 使用Git
 
@@ -47,7 +47,7 @@ git pull
 git push
 ```
 
-我们又不是打太极，为什么要先来一个pull再push呢？Git可以管理多人协作，你上次clone或者pull到本地的内容，在服务器上可能已经被别人修改了。再pull一次，git会帮你把本地的改动与服务器上的合并，如果有不能自动解决的冲突，命令会中止。这时候，你需要手动修改有冲突的文件，再重新提交本地改动、上传服务器的操作。如果push成功了，GitHub会在几分钟后更新你的网页。如果网页一直没有更新，可能是你的改动导致了编译错误，请联系系统管理员解决。
+我们又不是打太极，为什么要先来一个pull再push呢？这是因为Git可以管理多人协作，你上次clone或者pull到本地的内容，在服务器上可能已经被别人修改过了。再pull一次，Git会帮你把本地的改动与服务器上的合并，如果有不能自动解决的冲突，命令会中止。这时候，你需要手动修改有冲突的文件，再重新提交本地改动、上传服务器的操作。如果push成功了，GitHub会在几分钟后更新你的网页。如果网页一直没有更新，可能是你的改动导致了编译错误，请联系系统管理员解决。
 
 ### Git的后悔药
 
@@ -57,7 +57,7 @@ git push
 git checkout -- <FILE_PATH>
 ```
 
-如果已经提交，则须要使用以下命令。而且你只能重装整个提交清单，而不是单个文件了：
+如果已经提交，则须要使用以下命令。而且你只能重置整个提交清单，而不是单个文件了：
 
 ```
 git revert <COMMIT_ID>
@@ -81,27 +81,43 @@ Git还有很多功能，如果感兴趣，可以阅读[官方文档](https://git
 
 GitHub Pages使用[Jekyll](https://jekyllrb.com/) 去生成静态网页。当然，你不须要完全理解Jekyll。以内容更新为目的，你只须知道在哪里找到相应的页面和图片，以及了解页面内容的基本格式就可以了。
 
-一般的页面在根目录下，后缀是`.html`或者`.md`。比如，`./about.md`对应的是`http://<YOUR_WEBSITE>/about.html`。至于博客文章的页面，则存放在`_posts`目录下，文件名的格式是`YEAR-MONTH-DAY-title.md`，比如，`2021-09-22-how-to-earn-your-first-million.md`。而图片可以存放在任何目录下，一般习惯放在`img`或者`assets`目录下。注意，当在页面中引用图片时，须要提供正确的文件路径。
-
-页面文件开头会有font matter的数据信息，这部分是以yaml格式存在的，而正文则支持HTML和Markdown格式。先来看一个例子：
+一般的页面在根目录下，后缀是`.html`或者`.md`。比如，`./about.md`对应的是`http://<YOUR_WEBSITE>/about.html`。`index.html`比较特殊，它是默认的主页。至于博客文章的页面，则存放在`_posts`目录下，文件名的格式是`YEAR-MONTH-DAY-title.md`，比如，`2021-09-22-how-to-earn-your-first-million.md`。而图片可以存放在任何目录下，一般习惯放在`img`或者`assets`目录下。注意，当在页面中引用图片时，须提供正确的文件路径。
 
 ```
+<root>
+│   README.md
+│   about.md    
+│   contact.html
+|   index.html
+├───_posts
+│   │   2021-09-22-how-to-earn-your-first-million.md
+└───_img
+    │   bg-index.jpg
+    │   bg-post.jpg
+    └───posts
+        │   million_bg.jpg
+        │   million_data.jpg
+```
+
+页面文件开头一般包含[font matter](https://jekyllrb.com/docs/front-matter/)的数据信息，这部分是以yaml格式存在的，而正文则支持HTML和Markdown格式。先来看一个例子：
+
+``` Markdown
 ---
 layout: post
-title: "Sed pulvinar volutpat justo id tempus"
+title: "How to Earn Your First Million"
 date: 2021-06-01 17:21:00 -0700
-background: '/img/posts/bathroom_02.jpg'
+background: '/img/posts/million_bg.jpg'
 ---
 
 Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis orci placerat, molestie velit sed, lacinia nisi. Curabitur viverra id felis non cursus. Phasellus et sodales ligula. Sed imperdiet sed dui vitae aliquet. Quisque sed luctus dolor, sed congue ex. In iaculis turpis magna, non mattis nisi pellentesque id. Nam in metus nec dolor dapibus imperdiet et ut nunc.
 
-<img src="{% raw %}{% link img/posts/bathroom_03.jpg %}{% endraw %}" alt="bath tub 1" width="600"/>
+<img src="{% raw %}{% link img/posts/million_data.jpg %}{% endraw %}" alt="bath tub 1" width="600"/>
 ```
 
 开头在两个`---`之间的部分就是font matter，除了`layout`外（这是页面使用的模板），其他像`title`、`date`和`background`都可以按需要改动。`background`的图片需要添加到相应的目录下，在例子里你需要确保`/img/posts/`下有对应的图片文件。
 
-接下来就是文章内容，Markdown提供了很多文本格式支持，你可以参考[Cheatsheet](https://github.com/adam-p/markdown-here/wiki/Markdown-Cheatsheet)。例子中的文本没有使用任何格式，所以就是基本的段落文字。
-但例子中的配图，则直接使用了HTML。Markdown里的图片不便于调整图片尺寸，而HTML可以通过图片属性`width=600`，把大图片的宽度缩小为600像素（高度按比例缩小）。另外，图片路径，须要引用在`{% raw %}{% link %}{% endraw %}`里，以便编译时能生成正确的地址。你可以阅读[这个文档](https://www.w3schools.com/html/html_images.asp)以了解更多关于HTML的图片格式。
+接下来就是文章内容，Markdown提供了很多文本格式支持，你可以参考[GitHub的相关文档](https://guides.github.com/features/mastering-markdown/)。例子中的文本没有使用任何格式，所以就是基本的段落文字。
+但例子中的配图，则直接使用了[HTML img标签](https://www.w3schools.com/html/html_images.asp)。Markdown格式的图片不便于调整图片尺寸，而HTML可以通过图片属性`width=600`，把大图片的宽度缩小为600像素（高度按比例缩小）。另外，图片路径，须要引用在`{% raw %}{% link %}{% endraw %}`里，以便编译时能生成正确的地址。
 
 # 实践出真知
 
