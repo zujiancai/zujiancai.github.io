@@ -6,7 +6,7 @@ last_modified_at: 2021-09-24 11:45 -0700
 tags: [technology, chinese]
 ---
 
-本文假设你已经有一个搭建好的GitHub Pages repository，有系统管理员帮你处理技术细节，你只需要做一些简单的内容维护：增、删、改文章内容，更新背景图片等。
+> :information_source: 本文假设你已经有一个搭建好的GitHub Pages repository，有系统管理员帮你处理技术细节，你只需要做一些简单的内容维护：增、删、改文章内容，更新背景图片等。
 
 # 创建GitHub用户号与授权
 
@@ -79,9 +79,9 @@ Git还有很多功能，如果感兴趣，可以阅读[官方文档](https://git
 
 # GitHub Pages的目录和格式
 
-GitHub Pages使用[Jekyll](https://jekyllrb.com/) 去生成静态网页。当然，你不须要完全理解Jekyll。以内容更新为目的，你只须知道在哪里找到相应的页面和图片，以及了解页面内容的基本格式就可以了。
+GitHub Pages使用[Jekyll](https://jekyllrb.com/) 去生成静态网页。当然，你不须要完全理解Jekyll。以内容更新为导向，你只须知道在哪里找到相应的页面和图片，以及了解页面内容的基本格式就可以了。
 
-一般的页面在根目录下，后缀是`.html`或者`.md`。比如，`./about.md`对应的是`http://<YOUR_WEBSITE>/about.html`。`index.html`比较特殊，它是默认的主页。至于博客文章的页面，则存放在`_posts`目录下，文件名的格式是`YEAR-MONTH-DAY-title.md`，比如，`2021-09-22-how-to-earn-your-first-million.md`。而图片可以存放在任何目录下，一般习惯放在`img`或者`assets`目录下。注意，当在页面中引用图片时，须提供正确的文件路径。
+一般的页面在根目录下，后缀是`.html`或者`.md`。比如，`./about.md`对应的是`http://<YOUR_WEBSITE>/about.html`。但像`index.html`比较特殊，它是默认的主页。至于博客文章的页面，则存放在`_posts`目录下，文件名的格式是`YEAR-MONTH-DAY-title.md`，比如，`2021-09-22-how-to-earn-your-first-million.md`。所以，要添加新文章的话，你只要按照这个命名方式在该目录添加新文件就可以了。而图片，则可以放在任何目录下，一般习惯放在`img`或者`assets`目录下。注意，当在页面中引用图片时，须提供正确的文件路径。
 
 ```
 <root>
@@ -119,6 +119,8 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis orci placerat
 接下来就是文章内容，Markdown提供了很多文本格式支持，你可以参考[GitHub的相关文档](https://guides.github.com/features/mastering-markdown/)。例子中的文本没有使用任何格式，所以就是基本的段落文字。
 但例子中的配图，则直接使用了[HTML img标签](https://www.w3schools.com/html/html_images.asp)。Markdown格式的图片不便于调整图片尺寸，而HTML可以通过图片属性`width=600`，把大图片的宽度缩小为600像素（高度按比例缩小）。另外，图片路径，须要引用在`{% raw %}{% link %}{% endraw %}`里，以便编译时能生成正确的地址。
 
+> :warning: 关于Markdown，GitHub Pages支持两种处理器： [Kramdown](https://kramdown.gettalong.org/)和[GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/)，他们只有细微的差别。详情请看[这里](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/setting-a-markdown-processor-for-your-github-pages-site-using-jekyll)。
+
 # 实践出真知
 
-到这里你可以动手尝试了，不要害怕改坏了，Git的后悔药并不昂贵，而且遇到问题还有系统管理员作为你的后盾。Go and good luck!
+到这里你可以动手尝试了，不要害怕改坏了，Git的后悔药并不昂贵，而且遇到问题还有系统管理员作为你的后盾。Go and good luck! :smiley:
