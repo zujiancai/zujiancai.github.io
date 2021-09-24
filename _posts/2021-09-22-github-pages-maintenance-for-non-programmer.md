@@ -91,7 +91,7 @@ GitHub Pages使用[Jekyll](https://jekyllrb.com/) 去生成静态网页。当然
 │   index.html
 ├── _posts
 │   │   2021-09-22-how-to-earn-your-first-million.md
-└── _img
+└── img
     │   bg-index.jpg
     │   bg-post.jpg
     └── posts
