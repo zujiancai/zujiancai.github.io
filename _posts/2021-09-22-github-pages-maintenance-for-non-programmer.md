@@ -88,20 +88,20 @@ GitHub Pages使用[Jekyll](https://jekyllrb.com/) 去生成静态网页。当然
 │   README.md
 │   about.md    
 │   contact.html
-|   index.html
-├───_posts
+│   index.html
+├── _posts
 │   │   2021-09-22-how-to-earn-your-first-million.md
-└───_img
+└── _img
     │   bg-index.jpg
     │   bg-post.jpg
-    └───posts
+    └── posts
         │   million_bg.jpg
         │   million_data.jpg
 ```
 
 页面文件开头一般包含[font matter](https://jekyllrb.com/docs/front-matter/)的数据信息，这部分是以yaml格式存在的，而正文则支持HTML和Markdown格式。先来看一个例子：
 
-``` Markdown
+```
 ---
 layout: post
 title: "How to Earn Your First Million"

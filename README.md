@@ -1,20 +1,12 @@
-# Not Pure Poole <!-- omit in toc -->
+# Da Rou Ni <!-- omit in toc -->
 
-<a href="https://jekyll-themes.com">
-  <img src="https://img.shields.io/badge/featured%20on-JekyllThemes-red.svg" height="20" alt="Jekyll Themes Shield" >
-</a>
-
-**Not Pure Poole** is a simple, beautiful, and powerful Jekyll theme for blogs. It is built on [Poole](https://github.com/poole/poole) and [Pure](https://purecss.io/).
+This site is a fork from **Not Pure Poole**, which is a simple, beautiful, and powerful Jekyll theme for blogs. It is built on [Poole](https://github.com/poole/poole) and [Pure](https://purecss.io/).
 
 > Poole explains that Jekyll has been asking for a particular chemical for days now but every time it has been fetched for him he rejects it as **not pure**. Poole also explains that he caught a glimpse of the man inside and he looked barely human.
 >
 > -- <a href="https://www.bbc.co.uk/bitesize/guides/zbtjnrd/revision/6"><cite>The death of Jekyll</cite></a>
 
 -----
-
-See Not Pure Poole in action with [the demo site](https://vszhub.github.io/not-pure-poole/).
-
-![Screenshot](screenshot.png)
 
 ## Table of Contents <!-- omit in toc -->
 
@@ -56,29 +48,25 @@ See Not Pure Poole in action with [the demo site](https://vszhub.github.io/not-p
 
 ## Installation
 
-You can choose one of the following methods to install Not Pure Poole:
+> :warning: Below commands require [Docker](https://docs.docker.com/) being installed. And they are for Windows system. To use in Unix, please replace %cd% with $PWD in the commands.
 
-- Directly specify the `not-pure-poole` gem.
+To build the site, you can run this command (with [Docker](https://docs.docker.com/) installed):
 
-    1. Add `gem 'not-pure-poole'` into your `Gemfile`.
-    2. Add the below lines into your `_config.yml`.
+```
+docker run --rm -it --volume="%cd%:/srv/jekyll" --volume="%cd%/vendor/bundle:/usr/local/bundle" --env JEKYLL_ENV=production jekyll/jekyll:stable jekyll build
+```
 
-        ```yml
-        plugins:
-          - not-pure-poole
-        ```
+To serve it, run this command instead:
 
-- If your site is hosted on GitHub Pages, you can use [`jekyll-remote-theme`](https://github.com/benbalter/jekyll-remote-theme) to import the master branch of Not Pure Poole.
+```
+docker run --rm -it --volume="%cd%:/srv/jekyll" --volume="%cd%/vendor/bundle:/usr/local/bundle" --env JEKYLL_ENV=production -p 4000:4000 jekyll/jekyll:stable jekyll serve
+```
 
-    1. Add `gem 'jekyll-remote-theme'` into your `Gemfile`.
-    2. Add the below lines into your `_config.yml`.
+I also add `docker-compose.yml` for convenience. So, you can just run this to serve:
 
-        ```yml
-        plugins:
-          - jekyll-remote-theme
-
-        remote_theme: vszhub/not-pure-poole
-        ```
+```
+docker-compose up
+```
 
 ## Usage
 
