@@ -5,9 +5,7 @@ date: 2021-09-27 01:37 -0700
 tags: [technology]
 ---
 
-# Background
-
-After working for several years, I finally save up some money for stock investment. But I don't want to be a blind follower, so I researched and found something called technical analysis. These ideas reminded me of my dad's old stock analysis guide books. He started to study those books when I was a high school student, but I haven't seen him getting rich yet. Therefore I am a little skeptical and would like to experiment out with real data. Also I think it is good chance for me to practice with Python and Panda DataFrame. So, here is this project Finana (**Fin**ance **Ana**lysis) to help with data collection and processing.
+After working for several years, I finally save up some money for stock investment. But I don't want to be a blind follower, so I researched and found something called technical analysis. These ideas reminded me of my dad's old stock analysis guide books. He started to study those books when I was a high school student, but I haven't seen him getting rich yet. Therefore I am a little skeptical and would like to experiment out with real data. Also I think it is good chance to practice my knowledge with Python and Panda DataFrame. So, here is this project Finana (**Fin**ance **Ana**lysis) to help with data collection and processing.
 
 # Requirements
 
@@ -77,18 +75,18 @@ I don't want to reinvent the wheel, and would use [this handy code](https://gith
 
 I don't want to use database like SQL or CosmosDb. They are either hard to set up or too expensive. As each type of jobs would run as singleton, I don't need to support concurrent writes. And the data can be easily modelled as files. So Azure blob should be a good fit. Below are the files that will be used. All files should be pickled before uploading to Azure.
 
-File Name             | Collection         | Quantity            | Content
---------------------- | ------------------ | ------------------- | ------------------
-StockList             | SourceData         | 1                   | Full list of stocks in US exchanges
-SelectLists           | SourceData         | 1                   | Stock lists pre-configured
-{Ticker}              | SourceData         | 1 per ticker, ~8K   | History quotes for each stock
-{yyyy-MM-dd}_Select   | DailyReport        | 1 per day, keep 10  | Daily report for customized lists
-{yyyy-MM-dd}_Screen   | DailyReport        | 1 per day, keep 10  | Daily report for screening results
-{yyyy-MM-dd}_Ranking  | DailyReport        | 1 per day, keep 10  | Daily rankings by market cap bracket
-FetchListLog          | Control            | 1                   | Lock file and keep track of what day has been triggered for fetching all stocks
-FetchQuotesLog        | Control            | 1                   | Lock file and keep track of what day has been triggered for updating historical quotes
-{yyyy-MM-dd}_listjob  | Control            | 1 per day, keep 10  | Job status for fetching stock list
-{yyyy-MM-dd}_quotejob | Control            | 1 per day, keep 10  | Job status for fetching history. It also serves as a continuation token for each batch
+    File Name             | Collection         | Quantity            | Content
+    --------------------- | ------------------ | ------------------- | ------------------
+    StockList             | SourceData         | 1                   | Full list of stocks in US exchanges
+    SelectLists           | SourceData         | 1                   | Stock lists pre-configured
+    {Ticker}              | SourceData         | 1 per ticker, ~8K   | History quotes for each stock
+    {yyyy-MM-dd}_Select   | DailyReport        | 1 per day, keep 10  | Daily report for customized lists
+    {yyyy-MM-dd}_Screen   | DailyReport        | 1 per day, keep 10  | Daily report for screening results
+    {yyyy-MM-dd}_Ranking  | DailyReport        | 1 per day, keep 10  | Daily rankings by market cap bracket
+    FetchListLog          | Control            | 1                   | Lock file and keep track of what day has been triggered for fetching all stocks
+    FetchQuotesLog        | Control            | 1                   | Lock file and keep track of what day has been triggered for updating historical quotes
+    {yyyy-MM-dd}_listjob  | Control            | 1 per day, keep 10  | Job status for fetching stock list
+    {yyyy-MM-dd}_quotejob | Control            | 1 per day, keep 10  | Job status for fetching history. It also serves as a continuation token for each batch
 
 1. StockList and {Ticker} files are similar with a date and the [DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) object which contains the raw data:
 
@@ -215,6 +213,10 @@ FetchQuotesLog        | Control            | 1                   | Lock file and
         "start_time": "2021-09-30 00:06:12Z",
         "end_time": "",
         "status": "running",
+        "logs": [
+            { "FetchQuotes-1": "2021-09-30 00:06:12Z" },
+            // ...
+        ],
         "errors": [],
         "completed": [ "ABC", "ABD", ... ],
         "failed": [ "B1K", "DLE", ... ],
@@ -231,60 +233,47 @@ FetchQuotesLog        | Control            | 1                   | Lock file and
 
 1. FetchList job to refresh the stock lists of all US exchanges. After getting the stock list from remote, convert it to DataFrame and save it to Azure blob.
 
-<div class="mermaid">
-    graph LR
-    A[Start] --> B{Aquire Lock on Log}
-    B -->|Success| C{Check Last Date}
-    B -->|Failure| D[End as No-op]
-    C -->|Meet Schedule| E[Create Job Status]
-    C -->|Not Meet| D
-    E --> F[Load List from Remote and Save]
-    F --> G[Log Current Date and Update Status]
-    G --> H[Release Lock]
-    H --> I[End]
-</div>
+    <div class="mermaid">
+        graph TD
+        A[Start] --> B{Aquire Lock on Log}
+        B -->|Success| C{Check Last Date}
+        B -->|Failure| D[End as No-op]
+        C -->|Meet Schedule| E[Create Job Status]
+        C -->|Not Meet| D
+        E --> F[Load List from Remote and Save]
+        F --> G[Log Current Date and Update Status]
+        G --> H[Release Lock]
+        H --> I[End]
+    </div>
 
 2. TriggerSequence job to initialize this sequence: fetch historical quotes for all stocks (FetchQuotes), generate select report (ReportSelect), generate screen report and create rankings (ScreenAll). This initializer only check schedule and add the first task in queue.
 
-<div class="mermaid">
-    graph LR
-    A[Start] --> B{Aquire Lock on Log}
-    B -->|Success| C{Check Date}
-    B -->|Failure| D[End as No-op]
-    C -->|Meet Schedule| E[Add FetchQuotes Task in Queue]
-    C -->|Not Meet| D
-    E --> F[Log Current Date]
-    F --> G[Release Lock]
-    G --> H[End]
-</div>
+    <div class="mermaid">
+        graph TD
+        A[Start] --> B{Aquire Lock on Log}
+        B -->|Success| C{Check Date}
+        B -->|Failure| D[End as No-op]
+        C -->|Meet Schedule| E[Add FetchQuotes Task in Queue]
+        C -->|Not Meet| D
+        E --> F[Log Current Date]
+        F --> G[Release Lock]
+        G --> H[End]
+    </div>
 
-3. HandleQuotes to work on the quote related tasks in queue. It can handle different types of task in the sequence, and add new task in queue until the sequence is completed. Along the way, it also update the job status to reflect the sequence progress. 
+3. HandleQuotes job to work on the quote related tasks in the sequence. It can handle different types of tasks, and add new task back to queue until the sequence is completed. Along the way, it also update the job status to reflect the sequence progress.
 
-Below is the task transition. FetchQuotes only fetch a batch of 200 stocks each time and continue until all stocks have been udpated.
-
-<div class="mermaid">
-    stateDiagram-v2
-    [*] --> FetchQuotes
-    FetchQuotes --> FetchQuotes
-    FetchQuotes --> ReportSelect
-    ReportSelect --> ScreenAll
-    ScreenAll --> [*]
-</div>
-
-HandleQuotes job logic is like:
-
-<div class="mermaid">
-    graph LR
-    A[Listen on Task Queue] --> B{Check Task Type}
-    B -->|FetchQuotes| C[Fetch Quotes for Batch]
-    B -->|ReportSelect| D[Create Select Report]
-    B -->|SceenAll| E[Create Screen and Rankings]
-    C --> F{More Batch}
-    F --> |Yes| G[Add FetchQuotes Task]
-    F --> |No| H[Add ReportSelect Task]
-    D --> I[Add SceenAll Task]
-    E --> J[End]
-</div>
+    <div class="mermaid">
+        graph TD
+        A[Listen on Task Queue] --> B{Check Task Type}
+        B -->|FetchQuotes| C[Fetch Quotes for Batch]
+        B -->|ReportSelect| D[Create Select Report]
+        B -->|SceenAll| E[Create Screen and Rankings]
+        C --> F{More Batch}
+        F --> |Yes| G[Add FetchQuotes Task]
+        F --> |No| H[Add ReportSelect Task]
+        D --> I[Add SceenAll Task]
+        E --> J[End]
+    </div>
 
 4. The web job schedule is more frequent than our expected job frequency in case of any failure. Therefore, the job may retry a couple of times, need check the schedule or existing log in code.
 
@@ -296,13 +285,12 @@ HandleQuotes job logic is like:
 
 ### Frontend Web UI
 
-### Deployment
+# Deployment
 
-### Monitoring and Trouble-Shooting
-
+# Monitoring and Maintenance
 
 # Revision
 
 Version      | Start Date        | Description
 ------------ | ----------------- | -----------------------
-1.0          | 2021-09-27        | Created
+1.0          | 2021-09-27        | Creation
