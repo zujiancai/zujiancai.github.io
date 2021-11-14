@@ -34,12 +34,12 @@ Create a web based application to help on stock investment decision for US marke
 
 2. Indicators calculation is the same as above. But we should use stricter criteria, e.g. the signal line crossing needs to happen within 2 days, in order to keep the result list reasonably short:
 
-    Name         | Trigger                      | Lookback
-    ------------ | ---------------------------- | -----------------
-    MACD         | Value > Signal and Value < 0 | 2 days
-    RSI          | Two dips: 1st < 40, 2nd < 30 | 7 days
-    Supertrend   | Value < Close                | 2 days
-    Ranking      | Score increases 10% or more  | Current
+    Name         | Trigger                         | Lookback
+    ------------ | ------------------------------- | -----------------
+    MACD         | Value pass Signal and Value < 0 | 2 days
+    RSI          | Two dips: 1st < 40, 2nd < 30    | 7 days
+    Supertrend   | Value drop below Close          | 2 days
+    Ranking      | Score increases 10% or more     | Current
 
 ### Stock Rankings
 
@@ -75,18 +75,18 @@ I don't want to reinvent the wheel, and would use [this handy code](https://gith
 
 I don't want to use database like SQL or CosmosDb. They are either hard to set up or too expensive. As each type of jobs would run as singleton, I don't need to support concurrent writes. And the data can be easily modelled as files. So Azure blob should be a good fit. Below are the files that will be used. All files should be pickled before uploading to Azure.
 
-    File Name             | Collection         | Quantity            | Content
-    --------------------- | ------------------ | ------------------- | ------------------
-    StockList             | SourceData         | 1                   | Full list of stocks in US exchanges
-    SelectLists           | SourceData         | 1                   | Stock lists pre-configured
-    {Ticker}              | SourceData         | 1 per ticker, ~8K   | History quotes for each stock
-    {yyyy-MM-dd}_Select   | DailyReport        | 1 per day, keep 10  | Daily report for customized lists
-    {yyyy-MM-dd}_Screen   | DailyReport        | 1 per day, keep 10  | Daily report for screening results
-    {yyyy-MM-dd}_Ranking  | DailyReport        | 1 per day, keep 10  | Daily rankings by market cap bracket
-    FetchListLog          | Control            | 1                   | Lock file and keep track of what day has been triggered for fetching all stocks
-    FetchQuotesLog        | Control            | 1                   | Lock file and keep track of what day has been triggered for updating historical quotes
-    {yyyy-MM-dd}_listjob  | Control            | 1 per day, keep 10  | Job status for fetching stock list
-    {yyyy-MM-dd}_quotejob | Control            | 1 per day, keep 10  | Job status for fetching history. It also serves as a continuation token for each batch
+File Name             | Collection         | Quantity            | Content
+--------------------- | ------------------ | ------------------- | ------------------
+StockList             | SourceData         | 1                   | Full list of stocks in US exchanges
+ConfiguredLists       | SourceData         | 1                   | Stock lists pre-configured
+{Ticker}              | SourceData         | 1 per ticker, ~8K   | History quotes for each stock
+{yyyy-MM-dd}_Select   | DailyReport        | 1 per day, keep 10  | Daily report for customized lists
+{yyyy-MM-dd}_Screen   | DailyReport        | 1 per day, keep 10  | Daily report for screening results
+{yyyy-MM-dd}_Ranking  | DailyReport        | 1 per day, keep 10  | Daily rankings by market cap bracket
+FetchListLog          | Control            | 1                   | Lock file and keep track of what day has been triggered for fetching all stocks
+FetchQuotesLog        | Control            | 1                   | Lock file and keep track of what day has been triggered for updating historical quotes
+{yyyy-MM-dd}_listjob  | Control            | 1 per day, keep 10  | Job status for fetching stock list
+{yyyy-MM-dd}_quotejob | Control            | 1 per day, keep 10  | Job status for fetching history. It also serves as a continuation token for each batch
 
 1. StockList and {Ticker} files are similar with a date and the [DataFrame](https://pandas.pydata.org/docs/reference/api/pandas.DataFrame.html) object which contains the raw data:
 
@@ -109,7 +109,7 @@ I don't want to use database like SQL or CosmosDb. They are either hard to set u
     ---------- | ------- | ------- | ------- | ------- | -------- 
     2021-09-10 | 6186.30 | 6188.55 | 6130.25 | 6135.85 | 190400  
 
-2. SelectLists is a collection of pre-configured stock lists for making {yyyy-MM-dd}_Select report:
+2. ConfiguredLists is a collection of pre-configured stock lists for making {yyyy-MM-dd}_Select report:
 
     ```
     [
@@ -240,13 +240,13 @@ I don't want to use database like SQL or CosmosDb. They are either hard to set u
         B -->|Failure| D[End as No-op]
         C -->|Meet Schedule| E[Create Job Status]
         C -->|Not Meet| D
-        E --> F[Load List from Remote and Save]
+        E --> F[Load List from Remote and Save to Blob]
         F --> G[Log Current Date and Update Status]
         G --> H[Release Lock]
         H --> I[End]
     </div>
 
-2. TriggerSequence job to initialize this sequence: fetch historical quotes for all stocks (FetchQuotes), generate select report (ReportSelect), generate screen report and create rankings (ScreenAll). This initializer only check schedule and add the first task in queue.
+2. TriggerSequence job to initialize this sequence: fetch historical quotes for all stocks (FetchQuotes task type), generate report for configured lists, screening report and rankings by brackets (CreateReport task type). This initializer only check schedule and add the first task in queue.
 
     <div class="mermaid">
         graph TD
@@ -260,34 +260,55 @@ I don't want to use database like SQL or CosmosDb. They are either hard to set u
         G --> H[End]
     </div>
 
-3. HandleQuotes job to work on the quote related tasks in the sequence. It can handle different types of tasks, and add new task back to queue until the sequence is completed. Along the way, it also update the job status to reflect the sequence progress.
+3. HandleQuotes job to work on the quote related tasks in the sequence. It can handle different task types, and add new task to queue until the sequence is completed. Along the way, it also update the job status to reflect the sequence progress.
 
     <div class="mermaid">
         graph TD
         A[Listen on Task Queue] --> B{Check Task Type}
-        B -->|FetchQuotes| C[Fetch Quotes for Batch]
-        B -->|ReportSelect| D[Create Select Report]
-        B -->|SceenAll| E[Create Screen and Rankings]
-        C --> F{More Batch}
-        F --> |Yes| G[Add FetchQuotes Task]
-        F --> |No| H[Add ReportSelect Task]
-        D --> I[Add SceenAll Task]
-        E --> J[End]
+        B -->|FetchQuotes| C[Fetch Quotes for Batch and Update Status]
+        B -->|CreateReport| D[Create Reports and Update Status]
+        C --> E{More Batch}
+        D --> J[End]
+        E --> |Yes| F[Add FetchQuotes Task]
+        E --> |No| G[Add CreateReport Task]
     </div>
 
-4. The web job schedule is more frequent than our expected job frequency in case of any failure. Therefore, the job may retry a couple of times, need check the schedule or existing log in code.
+4. DataCleaner job to delete old job status and reports. It is optional for reducing storage consumption.
+
+5. The web job schedule is more frequent than our expected job frequency in case of any failure. Therefore, the job may retry a couple of times, need check the schedule or existing log in code.
 
     Job Type         | Schedule          | Lock File        | Description
     ---------------- | ----------------- | ---------------- | -----------------------------------
     FetchList        | 0 1 0 */2 * *     | FetchListLog     | Load stock list for all US exchanges
     TriggerSequence  | 0 0 18-23 * * 1-5 | FetchQuotesLog   | Trigger sequence for historical quotes handling
     HandleQuotes     | 0 */5 * * * *     | Azure Queue      | Handler sequence tasks in queue
+    DataCleaner      | 0 0 1 */2 * *     | None             | Delete old job status, e.g. more than 20 days ago
 
 ### Frontend Web UI
 
+1. Create Flask application with [this tutorial](https://flask.palletsprojects.com/en/2.0.x/). It should contains these pages:
+
+    Path             | Method    | Parameters        | Description
+    ---------------- | --------- | ----------------- | -----------------------------------
+    /home            | GET       |                   | Home page with report on configured lists
+    /screen          | GET       |                   | Screening report
+    /rankings        | GET       | b=(tn,sm,md,bg)   | If parameter is omitted, show top 20 of ranking for each bracket. Otherwise, show full ranking of the specified bracket
+    /jobs            | GET       | id=(job_id)       | If parameter is omitted, show entire job list. Otherwise, show job details with the specified job id
+    /tickers         | GET       |                   | Show the entire list of stocks and their details
+
+2. Use Jinja templates to render the pages. They should all inherit the default page with title bar, navigation bar and footer.
+
 # Deployment
 
+Follow [this example](https://github.com/smartninja/example-azure-flask) to deploy the application with Azure and GitHub.
+
 # Monitoring and Maintenance
+
+1. Directly check data in Azure blob: job outputs in SourceData and DailyReport, job status, and date log.
+
+2. Create unit tests to run locally with Azure storage access key.
+
+3. Optionally enable Application Insight for Azure web application.
 
 # Revision
 
