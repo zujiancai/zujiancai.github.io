@@ -288,19 +288,23 @@ FetchQuotesLog        | Control            | 1                   | Lock file and
 
 1. Create Flask application with [this tutorial](https://flask.palletsprojects.com/en/2.0.x/). It should contains these pages:
 
-    Path             | Method    | Parameters        | Description
-    ---------------- | --------- | ----------------- | -----------------------------------
-    /home            | GET       |                   | Home page with report on configured lists
-    /screen          | GET       |                   | Screening report
-    /rankings        | GET       | b=(tn,sm,md,bg)   | If parameter is omitted, show top 20 of ranking for each bracket. Otherwise, show full ranking of the specified bracket
-    /jobs            | GET       | id=(job_id)       | If parameter is omitted, show entire job list. Otherwise, show job details with the specified job id
-    /tickers         | GET       |                   | Show the entire list of stocks and their details
+    Path             | Method    | Parameters         | Description
+    ---------------- | --------- | ------------------ | -----------------------------------
+    /home            | GET       |                    | Home page with report on configured lists
+    /screen          | GET       |                    | Screening report
+    /rankings        | GET       | mc=`[tn,sm,md,bg]` | If parameter is omitted, show top 20 of ranking for each bracket. Otherwise, show full ranking of the specified bracket
+    /jobs            | GET       | id=JOB_ID          | If parameter is omitted, show entire job list. Otherwise, show job details with the specified job id
+    /tickers         | GET       |                    | Show the entire list of stocks and their details
 
 2. Use Jinja templates to render the pages. They should all inherit the default page with title bar, navigation bar and footer.
 
 # Deployment
 
-Follow [this example](https://github.com/smartninja/example-azure-flask) to deploy the application with Azure and GitHub.
+1. Follow [this example](https://github.com/smartninja/example-azure-flask) to deploy the code with Azure and GitHub.
+
+2. Create Azure storage account, and set up AAD access for the Azure WebApp.
+
+3. Create ConfiguredLists file in Azure blob, and set up web jobs with schedule in Azure WebApp. 
 
 # Monitoring and Maintenance
 
@@ -308,7 +312,7 @@ Follow [this example](https://github.com/smartninja/example-azure-flask) to depl
 
 2. Create unit tests to run locally with Azure storage access key.
 
-3. Optionally enable Application Insight for Azure web application.
+3. In Azure WebApp, turn on App Service logs and look at the log stream output. Application Insight is another option, but it might be more expensive.
 
 # Revision
 
