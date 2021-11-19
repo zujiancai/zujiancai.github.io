@@ -9,7 +9,7 @@ tags: [technology]
 
 The project name, Finana, stands for **Fin**ance **Ana**lysis. The project is to help with collecting stock historical quotes and processing them for basic technical analysis.
 
-# Background
+## Background
 
 After working for several years, I finally save up some money for stock investment. But I don't want to be a blind follower, so I researched and found something called technical analysis. These ideas reminded me of my dad's old stock analysis guide books. He started to study those books when I was a high school student, but I haven't seen him getting rich yet. Therefore I am a little skeptical and would like to experiment out with real data. Also I think it would be a good chance to practice my knowledge with Python and Panda DataFrame.
 
@@ -17,7 +17,7 @@ After working for several years, I finally save up some money for stock investme
 
 Create a web based application to help on stock investment decision for US markets with basic technical analysis. Major functionalities include: create daily report with indicator status of selected stocks for buy/sell/hold decision, and do daily screening on a wide range of stocks for buy/short choices. While screening, also create rankings by market capacity bracket (big, middle, small, tiny).
 
-### Report for Selected Stocks
+#### Report for Selected Stocks
 
 1. For simplicity, hardcode the lists of stocks, and put them directly in the storage. Input UI is not required, but we need to support multiple lists, e.g. holdings and watch list.
 
