@@ -2,10 +2,15 @@
 layout: post
 title: "Finana Project Design"
 date: 2021-09-27 01:37 -0700
+comments: true
 tags: [technology]
 ---
 
-After working for several years, I finally save up some money for stock investment. But I don't want to be a blind follower, so I researched and found something called technical analysis. These ideas reminded me of my dad's old stock analysis guide books. He started to study those books when I was a high school student, but I haven't seen him getting rich yet. Therefore I am a little skeptical and would like to experiment out with real data. Also I think it is good chance to practice my knowledge with Python and Panda DataFrame. So, here is this project Finana (**Fin**ance **Ana**lysis) to help with data collection and processing.
+The project name, Finana, stands for **Fin**ance **Ana**lysis. The project is to help with collecting stock historical quotes and processing them for basic technical analysis.
+
+# Background
+
+After working for several years, I finally save up some money for stock investment. But I don't want to be a blind follower, so I researched and found something called technical analysis. These ideas reminded me of my dad's old stock analysis guide books. He started to study those books when I was a high school student, but I haven't seen him getting rich yet. Therefore I am a little skeptical and would like to experiment out with real data. Also I think it would be a good chance to practice my knowledge with Python and Panda DataFrame.
 
 # Requirements
 
@@ -39,7 +44,7 @@ Create a web based application to help on stock investment decision for US marke
     MACD         | Value pass Signal and Value < 0 | 2 days
     RSI          | Two dips: 1st < 40, 2nd < 30    | 7 days
     Supertrend   | Value drop below Close          | 2 days
-    Ranking      | Score increases 10% or more     | Current
+    Ranking      | Place move up 10% or more       | Current
 
 ### Stock Rankings
 
