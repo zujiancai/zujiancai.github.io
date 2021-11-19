@@ -3,6 +3,7 @@ layout: post
 title: "Finana Project Design"
 date: 2021-09-27 01:37 -0700
 comments: true
+toc: true
 tags: [technology]
 ---
 
