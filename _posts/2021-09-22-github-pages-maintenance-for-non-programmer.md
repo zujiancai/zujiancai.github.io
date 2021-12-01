@@ -3,16 +3,17 @@ layout: post
 title: "GitHub Pages内容维护（非程序员）"
 date: 2021-09-22 09:00 -0700
 last_modified_at: 2021-09-24 11:45 -0700
+toc: true
 tags: [technology, chinese]
 ---
 
-> :bulb: 本文假设你已经有一个搭建好的GitHub Pages repository，有系统管理员帮你处理技术细节，你只需要做一些简单的内容维护：增、删、改文章内容，更新背景图片等。
+> 本文假设你已经有一个搭建好的GitHub Pages repository，有系统管理员帮你处理技术细节，你只需要做一些简单的内容维护：增、删、改文章内容，更新背景图片等。
 
-# 创建GitHub用户号与授权
+## 创建GitHub用户号与授权
 
 如果你还没有一个GitHub用户号，可以到[这里](https://github.com/)申请，按网页提示操作就可以了，这里不再赘述。然后，把你的用户名（不需要密码哦！）提供给系统管理员，作必要的授权。
 
-# 使用Git
+## 使用Git
 
 Git是一个版本维护工具，可以到[这里](https://git-scm.com/downloads)下载并安装。
 GitHub Pages的内容（包括代码和设置文件）是以Git repository的形式存在的，repository里面有一个master branch（主干版本），我们也可以从它分出其他的branch，但简单起见，这里只使用master。在命令行运行下面的命令，你将在本地建立一个和GitHub repository关联的文件夹，而内容就是master branch的：
@@ -77,7 +78,7 @@ git revert head
 
 Git还有很多功能，如果感兴趣，可以阅读[官方文档](https://git-scm.com/docs)。
 
-# GitHub Pages的目录和格式
+## GitHub Pages的目录和格式
 
 GitHub Pages使用[Jekyll](https://jekyllrb.com/) 去生成静态网页。当然，你不须要完全理解Jekyll。以内容更新为导向，你只须知道在哪里找到相应的页面和图片，以及了解页面内容的基本格式就可以了。
 
@@ -121,6 +122,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit. Cras quis orci placerat
 
 > :warning: 关于Markdown，GitHub Pages支持两种处理器： [Kramdown](https://kramdown.gettalong.org/)和[GitHub Flavored Markdown (GFM)](https://github.github.com/gfm/)，他们只有细微的差别。详情请看[这里](https://docs.github.com/en/pages/setting-up-a-github-pages-site-with-jekyll/setting-a-markdown-processor-for-your-github-pages-site-using-jekyll)。
 
-# 实践出真知
+## 实践出真知
 
 到这里你可以动手尝试了，不要害怕改坏了，Git的后悔药并不昂贵，而且遇到问题还有系统管理员作为你的后盾。Go and good luck! :smiley:

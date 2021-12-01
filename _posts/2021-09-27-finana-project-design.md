@@ -237,7 +237,7 @@ FetchQuotesLog        | Control            | 1                   | Lock file and
     mermaid.initialize({ startOnLoad: true });
 </script>
 
-1. FetchList job to refresh the stock lists of all US exchanges. After getting the stock list from remote, convert it to DataFrame and save it to Azure blob.
+1. FetchList job to refresh the stock lists of all US exchanges. It use FetchListLog to ensure only one job is executed within the scheduled time window.
 
     <div class="mermaid">
         graph TD
@@ -252,7 +252,7 @@ FetchQuotesLog        | Control            | 1                   | Lock file and
         H --> I[End]
     </div>
 
-2. TriggerSequence job to initialize this sequence: fetch historical quotes for all stocks (FetchQuotes task type), generate report for configured lists, screening report and rankings by brackets (CreateReport task type). This initializer only check schedule and add the first task in queue.
+2. TriggerSequence job to initialize this sequence: fetch historical quotes for all stocks (FetchQuotes task type), generate report for configured lists, screening report and rankings by brackets (CreateReport task type). It use FetchQuotesLog to ensure only one sequence is triggered within the scheduled time window.
 
     <div class="mermaid">
         graph TD
@@ -281,7 +281,7 @@ FetchQuotesLog        | Control            | 1                   | Lock file and
 
 4. DataCleaner job to delete old job status and reports. It is optional for reducing storage consumption.
 
-5. The web job schedule is more frequent than our expected job frequency in case of any failure. Therefore, the job may retry a couple of times, need check the schedule or existing log in code.
+5. The web job schedule is more frequent than our expected job frequency in case of any failure. The job may retry a couple of times, but the schedule check and log file will ensure only one job is executed.
 
     Job Type         | Schedule          | Lock File        | Description
     ---------------- | ----------------- | ---------------- | -----------------------------------
